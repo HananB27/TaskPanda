@@ -1,15 +1,245 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  engineType      = "library"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model avatar_table {
+  avatar_ID    String         @id(map: "avatar_id") @db.VarChar
+  url          String         @db.VarChar
+  owner        String         @db.VarChar
+  content_type String         @db.VarChar
+  owner_type   String?        @db.VarChar
+  issue_status issue_status[]
+  issue_type   issue_type[]
+  projects     projects[]
+}
+
+model collaborator_roles {
+  collaborator_roles_ID String        @id(map: "collaborator_roles_id") @db.VarChar
+  collaborator_group_ID String        @db.VarChar
+  name                  String        @db.VarChar
+  permissions           Int
+  description           String?       @db.VarChar
+  user_ID               String        @db.VarChar
+  collaborators         collaborators @relation(fields: [collaborator_group_ID], references: [collaborators_ID], onDelete: NoAction, onUpdate: NoAction, map: "collaborator_group_id")
+  users                 users         @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_id")
+}
+
+model collaborators {
+  collaborators_ID   String               @id(map: "collaborators_id") @db.VarChar
+  project_ID         String               @db.VarChar
+  user_ID            String               @db.VarChar
+  collaborator_roles collaborator_roles[]
+  projects           projects             @relation(fields: [project_ID], references: [project_ID], onDelete: NoAction, onUpdate: NoAction, map: "project_ID")
+  users              users                @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_ID")
+}
+
+model comment {
+  comment_ID String      @id(map: "comment_pk") @db.VarChar
+  content    String?     @db.VarChar
+  creator    String      @db.VarChar
+  created_at DateTime    @db.Timestamptz(6)
+  reaction   String?     @db.VarChar
+  issue_ID   String      @db.VarChar
+  users      users       @relation(fields: [creator], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "comment___creator")
+  issue      issue       @relation(fields: [issue_ID], references: [issue_ID], onDelete: Cascade, onUpdate: NoAction, map: "issue_id")
+  reactions  reactions[]
+}
+
+model custom_field {
+  custom_field_ID                                                    String                @id(map: "custom_field_id") @db.VarChar
+  issue_type                                                         String                @db.VarChar
+  field_key                                                          String                @db.VarChar
+  field_type                                                         String                @db.VarChar
+  description                                                        String?               @db.VarChar
+  field_name                                                         String                @db.VarChar
+  issue_type_custom_field_issue_typeToissue_type                     issue_type            @relation("custom_field_issue_typeToissue_type", fields: [issue_type], references: [type_ID], onDelete: NoAction, onUpdate: NoAction, map: "custom_field_issue_type_type_id_fk")
+  custom_field_option_custom_field_option_custom_fieldTocustom_field custom_field_option[] @relation("custom_field_option_custom_fieldTocustom_field")
+  custom_field_value_custom_field_value_custom_fieldTocustom_field   custom_field_value[]  @relation("custom_field_value_custom_fieldTocustom_field")
+  user_picker_user_picker_custom_fieldTocustom_field                 user_picker[]         @relation("user_picker_custom_fieldTocustom_field")
+}
+
+model custom_field_option {
+  option_ID                                                   String       @id(map: "custom_field_option_id") @db.VarChar
+  custom_field                                                String       @db.VarChar
+  config                                                      String       @db.VarChar
+  parent_option_ID                                            String?      @db.VarChar
+  enabled                                                     Boolean      @default(false)
+  order_number                                                String       @db.VarChar
+  value                                                       String       @db.VarChar
+  custom_field_custom_field_option_custom_fieldTocustom_field custom_field @relation("custom_field_option_custom_fieldTocustom_field", fields: [custom_field], references: [custom_field_ID], onDelete: NoAction, onUpdate: NoAction, map: "custom_field_option_custom_field_custom_field_id_fk")
+}
+
+model custom_field_value {
+  custom_field_value_ID                                      String       @id(map: "custom_field_value_pk") @db.VarChar
+  issue                                                      String       @db.VarChar
+  custom_field                                               String       @db.VarChar
+  updated                                                    String?      @db.VarChar
+  parent_key                                                 String?      @db.VarChar
+  string_value                                               String?      @db.VarChar
+  number_value                                               Int?
+  text_value                                                 String?      @db.VarChar
+  date_value                                                 DateTime?    @db.Date
+  custom_field_custom_field_value_custom_fieldTocustom_field custom_field @relation("custom_field_value_custom_fieldTocustom_field", fields: [custom_field], references: [custom_field_ID], onDelete: NoAction, onUpdate: NoAction, map: "custom_field_value___custom_field")
+  issue_custom_field_value_issueToissue                      issue        @relation("custom_field_value_issueToissue", fields: [issue], references: [issue_ID], onDelete: NoAction, onUpdate: NoAction, map: "custom_field_value___issue")
+}
+
+model issue {
+  project_ID                                         String               @db.VarChar
+  issue_ID                                           String               @id(map: "issue_id") @db.VarChar
+  type                                               String               @db.VarChar
+  name                                               String               @db.VarChar
+  summary                                            String?              @db.VarChar
+  parent                                             String?              @db.VarChar
+  priority                                           String               @db.VarChar
+  status                                             String               @db.VarChar
+  created_at                                         DateTime             @db.Date
+  updated_at                                         DateTime?            @db.Date
+  url                                                String               @db.VarChar
+  due_at                                             DateTime?            @db.Timestamptz(6)
+  resolution_at                                      DateTime?            @db.Timestamptz(6)
+  original_estimate_at                               DateTime?            @db.Timestamptz(6)
+  estimate_done_at                                   DateTime?            @db.Timestamptz(6)
+  comment                                            comment[]
+  custom_field_value_custom_field_value_issueToissue custom_field_value[] @relation("custom_field_value_issueToissue")
+  priority_issue_priorityTopriority                  priority             @relation("issue_priorityTopriority", fields: [priority], references: [priority_ID], onDelete: NoAction, onUpdate: NoAction, map: "priority")
+  projects                                           projects             @relation(fields: [project_ID], references: [project_ID], onDelete: NoAction, onUpdate: NoAction, map: "project_id")
+  issue_status                                       issue_status         @relation(fields: [status], references: [status_ID], onDelete: NoAction, onUpdate: NoAction, map: "status")
+  issue_type                                         issue_type           @relation(fields: [type], references: [type_ID], onDelete: NoAction, onUpdate: NoAction, map: "type_id")
+}
+
+model issue_status {
+  status_ID    String        @id(map: "status_ID") @db.VarChar
+  name         String        @db.VarChar
+  avatar       String?       @db.VarChar
+  color        String        @default("#FFFFFF") @db.VarChar
+  issue        issue[]
+  avatar_table avatar_table? @relation(fields: [avatar], references: [avatar_ID], onDelete: NoAction, onUpdate: NoAction, map: "avatar")
+}
+
+model issue_type {
+  type_ID                                          String         @id(map: "type_id") @db.VarChar
+  name                                             String         @db.VarChar(100)
+  description                                      String?        @db.VarChar
+  icon                                             String?        @db.VarChar
+  fields                                           String         @db.VarChar
+  avatar                                           String?        @db.VarChar
+  custom_field_custom_field_issue_typeToissue_type custom_field[] @relation("custom_field_issue_typeToissue_type")
+  issue                                            issue[]
+  avatar_table                                     avatar_table?  @relation(fields: [avatar], references: [avatar_ID], onDelete: NoAction, onUpdate: NoAction, map: "avatar_issue_type")
+}
+
+model priority {
+  priority_ID                    String  @id(map: "priority_ID") @db.VarChar
+  name                           String  @db.VarChar
+  avatar                         String  @db.VarChar
+  color                          String  @default("#FFFF00") @db.VarChar
+  issue_issue_priorityTopriority issue[] @relation("issue_priorityTopriority")
+}
+
+model project_type {
+  type_ID                                      String     @id(map: "type_ID") @db.VarChar
+  type_name                                    String     @db.VarChar(100)
+  projects_projects_project_typeToproject_type projects[] @relation("projects_project_typeToproject_type")
+}
+
+model projects {
+  project_ID                                       String          @id(map: "project_ID") @db.VarChar
+  project_lead                                     String          @db.VarChar
+  project_name                                     String          @db.VarChar(100)
+  project_type                                     String          @db.VarChar
+  team_ID                                          String          @db.VarChar
+  project_key                                      String          @db.VarChar
+  avatar                                           String          @db.VarChar
+  url                                              String          @db.VarChar
+  project_category                                 String?         @db.VarChar
+  collaborators                                    collaborators[]
+  issue                                            issue[]
+  avatar_table                                     avatar_table    @relation(fields: [avatar], references: [avatar_ID], onDelete: NoAction, onUpdate: NoAction, map: "avatar_projects")
+  project_type_projects_project_typeToproject_type project_type    @relation("projects_project_typeToproject_type", fields: [project_type], references: [type_ID], onDelete: NoAction, onUpdate: NoAction, map: "project_type_ID")
+  team                                             team            @relation(fields: [team_ID], references: [team_ID], onDelete: NoAction, onUpdate: NoAction, map: "team_ID")
+  users                                            users           @relation(fields: [project_lead], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_ID")
+}
+
+model reactions {
+  reaction_ID String  @id(map: "reactions_pk") @db.VarChar
+  message     String  @db.VarChar
+  user_ID     String  @db.VarChar
+  emoji       String  @db.VarChar
+  users       users   @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "reactions___user")
+  comment     comment @relation(fields: [message], references: [comment_ID], onDelete: NoAction, onUpdate: NoAction, map: "reactions_comment_comment_id_fk")
+}
+
+model salary {
+  salary_ID String  @id(map: "salary_ID") @db.VarChar
+  user_ID   String  @db.VarChar
+  amount    Decimal @db.Decimal(10, 4)
+  team_ID   String  @db.VarChar
+  team      team    @relation(fields: [team_ID], references: [team_ID], onDelete: NoAction, onUpdate: NoAction, map: "team_ID")
+  users     users   @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_id")
+}
+
+model team {
+  team_ID    String       @id(map: "team_ID") @db.VarChar
+  user_ID    String       @db.VarChar
+  team_name  String       @db.VarChar(320)
+  projects   projects[]
+  salary     salary[]
+  users      users        @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_ID")
+  team_roles team_roles[]
+}
+
+model team_roles {
+  role_name   String  @db.VarChar(320)
+  role_ID     String  @id(map: "role_ID") @db.VarChar
+  user_ID     String? @db.VarChar
+  team_ID     String  @db.VarChar
+  permissions String  @db.VarChar
+  description String  @db.VarChar
+  team        team    @relation(fields: [team_ID], references: [team_ID], onDelete: NoAction, onUpdate: NoAction, map: "team_id")
+  users       users?  @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_id")
+}
+
+model user_picker {
+  user_picker_ID                                      String              @id(map: "user_picker_id") @db.VarChar
+  custom_field                                        String              @db.VarChar
+  enabled                                             Boolean             @default(false)
+  config                                              String              @db.VarChar
+  custom_field_user_picker_custom_fieldTocustom_field custom_field        @relation("user_picker_custom_fieldTocustom_field", fields: [custom_field], references: [custom_field_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_picker_custom_field_custom_field_id_fk")
+  user_picker_group                                   user_picker_group[]
+}
+
+model user_picker_group {
+  user_picker_group_ID String      @id(map: "user_picker_group_pk") @db.VarChar
+  filter               String      @db.VarChar
+  groupname            String?     @db.VarChar
+  user_picker          user_picker @relation(fields: [filter], references: [user_picker_ID], onDelete: NoAction, onUpdate: NoAction, map: "user_picker_group_user_picker_user_picker_id_fk")
+}
+
+model users {
+  username           String               @db.VarChar(64)
+  first_name         String               @db.VarChar(64)
+  last_name          String               @db.VarChar(64)
+  email              String               @db.VarChar(320)
+  password           String               @db.VarChar
+  created_date       DateTime             @db.Date
+  user_ID            String               @id(map: "users_pk") @db.VarChar
+  updated_date       String?              @db.VarChar
+  is_active          Boolean              @default(false)
+  last_active        DateTime             @db.Timestamptz(6)
+  avatar             String?              @db.VarChar
+  collaborator_roles collaborator_roles[]
+  collaborators      collaborators[]
+  comment            comment[]
+  projects           projects[]
+  reactions          reactions[]
+  salary             salary[]
+  team               team[]
+  team_roles         team_roles[]
 }
