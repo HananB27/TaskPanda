@@ -1,0 +1,1412 @@
+{
+  "id": "306a6f28-7672-451f-8cb7-bc02bde36c64",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.avatar_table": {
+      "name": "avatar_table",
+      "schema": "",
+      "columns": {
+        "avatar_ID": {
+          "name": "avatar_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "owner": {
+          "name": "owner",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_type": {
+          "name": "content_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "owner_type": {
+          "name": "owner_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.collaborator_roles": {
+      "name": "collaborator_roles",
+      "schema": "",
+      "columns": {
+        "collaborator_roles_ID": {
+          "name": "collaborator_roles_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "collaborator_group_ID": {
+          "name": "collaborator_group_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permissions": {
+          "name": "permissions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "collaborator_group_id": {
+          "name": "collaborator_group_id",
+          "tableFrom": "collaborator_roles",
+          "tableTo": "collaborators",
+          "columnsFrom": [
+            "collaborator_group_ID"
+          ],
+          "columnsTo": [
+            "collaborators_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_id": {
+          "name": "user_id",
+          "tableFrom": "collaborator_roles",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.collaborators": {
+      "name": "collaborators",
+      "schema": "",
+      "columns": {
+        "collaborators_ID": {
+          "name": "collaborators_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "project_ID": {
+          "name": "project_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "project_ID": {
+          "name": "project_ID",
+          "tableFrom": "collaborators",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "project_ID"
+          ],
+          "columnsTo": [
+            "project_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "tableFrom": "collaborators",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.comment": {
+      "name": "comment",
+      "schema": "",
+      "columns": {
+        "comment_ID": {
+          "name": "comment_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creator": {
+          "name": "creator",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reaction": {
+          "name": "reaction",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "issue_ID": {
+          "name": "issue_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "comment___creator": {
+          "name": "comment___creator",
+          "tableFrom": "comment",
+          "tableTo": "users",
+          "columnsFrom": [
+            "creator"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "issue_id": {
+          "name": "issue_id",
+          "tableFrom": "comment",
+          "tableTo": "issue",
+          "columnsFrom": [
+            "issue_ID"
+          ],
+          "columnsTo": [
+            "issue_ID"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.custom_field": {
+      "name": "custom_field",
+      "schema": "",
+      "columns": {
+        "custom_field_ID": {
+          "name": "custom_field_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "issue_type": {
+          "name": "issue_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "field_key": {
+          "name": "field_key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "field_type": {
+          "name": "field_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "field_name": {
+          "name": "field_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "custom_field_issue_type_type_id_fk": {
+          "name": "custom_field_issue_type_type_id_fk",
+          "tableFrom": "custom_field",
+          "tableTo": "issue_type",
+          "columnsFrom": [
+            "issue_type"
+          ],
+          "columnsTo": [
+            "type_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.custom_field_option": {
+      "name": "custom_field_option",
+      "schema": "",
+      "columns": {
+        "option_ID": {
+          "name": "option_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "custom_field": {
+          "name": "custom_field",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "config": {
+          "name": "config",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_option_ID": {
+          "name": "parent_option_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "order_number": {
+          "name": "order_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "custom_field_option_custom_field_custom_field_id_fk": {
+          "name": "custom_field_option_custom_field_custom_field_id_fk",
+          "tableFrom": "custom_field_option",
+          "tableTo": "custom_field",
+          "columnsFrom": [
+            "custom_field"
+          ],
+          "columnsTo": [
+            "custom_field_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.custom_field_value": {
+      "name": "custom_field_value",
+      "schema": "",
+      "columns": {
+        "custom_field_value_ID": {
+          "name": "custom_field_value_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "issue": {
+          "name": "issue",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "custom_field": {
+          "name": "custom_field",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated": {
+          "name": "updated",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_key": {
+          "name": "parent_key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "string_value": {
+          "name": "string_value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "number_value": {
+          "name": "number_value",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_value": {
+          "name": "text_value",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_value": {
+          "name": "date_value",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "custom_field_value___custom_field": {
+          "name": "custom_field_value___custom_field",
+          "tableFrom": "custom_field_value",
+          "tableTo": "custom_field",
+          "columnsFrom": [
+            "custom_field"
+          ],
+          "columnsTo": [
+            "custom_field_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "custom_field_value___issue": {
+          "name": "custom_field_value___issue",
+          "tableFrom": "custom_field_value",
+          "tableTo": "issue",
+          "columnsFrom": [
+            "issue"
+          ],
+          "columnsTo": [
+            "issue_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.issue": {
+      "name": "issue",
+      "schema": "",
+      "columns": {
+        "project_ID": {
+          "name": "project_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issue_ID": {
+          "name": "issue_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary": {
+          "name": "summary",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent": {
+          "name": "parent",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_at": {
+          "name": "due_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolution_at": {
+          "name": "resolution_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "original_estimate_at": {
+          "name": "original_estimate_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estimate_done_at": {
+          "name": "estimate_done_at",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "priority": {
+          "name": "priority",
+          "tableFrom": "issue",
+          "tableTo": "priority",
+          "columnsFrom": [
+            "priority"
+          ],
+          "columnsTo": [
+            "priority_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "project_id": {
+          "name": "project_id",
+          "tableFrom": "issue",
+          "tableTo": "projects",
+          "columnsFrom": [
+            "project_ID"
+          ],
+          "columnsTo": [
+            "project_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "status": {
+          "name": "status",
+          "tableFrom": "issue",
+          "tableTo": "issue_status",
+          "columnsFrom": [
+            "status"
+          ],
+          "columnsTo": [
+            "status_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "type_id": {
+          "name": "type_id",
+          "tableFrom": "issue",
+          "tableTo": "issue_type",
+          "columnsFrom": [
+            "type"
+          ],
+          "columnsTo": [
+            "type_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "issue_id": {
+          "name": "issue_id",
+          "columns": [
+            "issue_ID",
+            "issue_ID"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.issue_status": {
+      "name": "issue_status",
+      "schema": "",
+      "columns": {
+        "status_ID": {
+          "name": "status_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "color": {
+          "name": "color",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'#FFFFFF'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "avatar": {
+          "name": "avatar",
+          "tableFrom": "issue_status",
+          "tableTo": "avatar_table",
+          "columnsFrom": [
+            "avatar"
+          ],
+          "columnsTo": [
+            "avatar_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.issue_type": {
+      "name": "issue_type",
+      "schema": "",
+      "columns": {
+        "type_ID": {
+          "name": "type_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "icon": {
+          "name": "icon",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fields": {
+          "name": "fields",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "avatar_issue_type": {
+          "name": "avatar_issue_type",
+          "tableFrom": "issue_type",
+          "tableTo": "avatar_table",
+          "columnsFrom": [
+            "avatar"
+          ],
+          "columnsTo": [
+            "avatar_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "type_id": {
+          "name": "type_id",
+          "columns": [
+            "type_ID",
+            "type_ID"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.priority": {
+      "name": "priority",
+      "schema": "",
+      "columns": {
+        "priority_ID": {
+          "name": "priority_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "color": {
+          "name": "color",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'#FFFF00'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.project_type": {
+      "name": "project_type",
+      "schema": "",
+      "columns": {
+        "type_ID": {
+          "name": "type_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type_name": {
+          "name": "type_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.projects": {
+      "name": "projects",
+      "schema": "",
+      "columns": {
+        "project_ID": {
+          "name": "project_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_lead": {
+          "name": "project_lead",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_name": {
+          "name": "project_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_type": {
+          "name": "project_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_ID": {
+          "name": "team_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_key": {
+          "name": "project_key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_category": {
+          "name": "project_category",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "avatar_projects": {
+          "name": "avatar_projects",
+          "tableFrom": "projects",
+          "tableTo": "avatar_table",
+          "columnsFrom": [
+            "avatar"
+          ],
+          "columnsTo": [
+            "avatar_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "project_type_ID": {
+          "name": "project_type_ID",
+          "tableFrom": "projects",
+          "tableTo": "project_type",
+          "columnsFrom": [
+            "project_type"
+          ],
+          "columnsTo": [
+            "type_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "team_ID": {
+          "name": "team_ID",
+          "tableFrom": "projects",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_ID"
+          ],
+          "columnsTo": [
+            "team_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "tableFrom": "projects",
+          "tableTo": "users",
+          "columnsFrom": [
+            "project_lead"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "project_ID": {
+          "name": "project_ID",
+          "columns": [
+            "project_ID",
+            "project_ID"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.reactions": {
+      "name": "reactions",
+      "schema": "",
+      "columns": {
+        "reaction_ID": {
+          "name": "reaction_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emoji": {
+          "name": "emoji",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reactions___user": {
+          "name": "reactions___user",
+          "tableFrom": "reactions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reactions_comment_comment_id_fk": {
+          "name": "reactions_comment_comment_id_fk",
+          "tableFrom": "reactions",
+          "tableTo": "comment",
+          "columnsFrom": [
+            "message"
+          ],
+          "columnsTo": [
+            "comment_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.salary": {
+      "name": "salary",
+      "schema": "",
+      "columns": {
+        "salary_ID": {
+          "name": "salary_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_ID": {
+          "name": "team_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_ID": {
+          "name": "team_ID",
+          "tableFrom": "salary",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_ID"
+          ],
+          "columnsTo": [
+            "team_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_id": {
+          "name": "user_id",
+          "tableFrom": "salary",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.team": {
+      "name": "team",
+      "schema": "",
+      "columns": {
+        "team_ID": {
+          "name": "team_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_name": {
+          "name": "team_name",
+          "type": "varchar(320)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_ID": {
+          "name": "user_ID",
+          "tableFrom": "team",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "team_ID": {
+          "name": "team_ID",
+          "columns": [
+            "team_ID",
+            "team_ID",
+            "team_ID"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.team_roles": {
+      "name": "team_roles",
+      "schema": "",
+      "columns": {
+        "role_name": {
+          "name": "role_name",
+          "type": "varchar(320)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role_ID": {
+          "name": "role_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "team_ID": {
+          "name": "team_ID",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "permissions": {
+          "name": "permissions",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_id": {
+          "name": "team_id",
+          "tableFrom": "team_roles",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_ID"
+          ],
+          "columnsTo": [
+            "team_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_id": {
+          "name": "user_id",
+          "tableFrom": "team_roles",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_ID"
+          ],
+          "columnsTo": [
+            "user_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_picker": {
+      "name": "user_picker",
+      "schema": "",
+      "columns": {
+        "user_picker_ID": {
+          "name": "user_picker_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "custom_field": {
+          "name": "custom_field",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "config": {
+          "name": "config",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_picker_custom_field_custom_field_id_fk": {
+          "name": "user_picker_custom_field_custom_field_id_fk",
+          "tableFrom": "user_picker",
+          "tableTo": "custom_field",
+          "columnsFrom": [
+            "custom_field"
+          ],
+          "columnsTo": [
+            "custom_field_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_picker_group": {
+      "name": "user_picker_group",
+      "schema": "",
+      "columns": {
+        "user_picker_group_ID": {
+          "name": "user_picker_group_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "filter": {
+          "name": "filter",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupname": {
+          "name": "groupname",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_picker_group_user_picker_user_picker_id_fk": {
+          "name": "user_picker_group_user_picker_user_picker_id_fk",
+          "tableFrom": "user_picker_group",
+          "tableTo": "user_picker",
+          "columnsFrom": [
+            "filter"
+          ],
+          "columnsTo": [
+            "user_picker_ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "username": {
+          "name": "username",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(320)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_ID": {
+          "name": "user_ID",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "last_active": {
+          "name": "last_active",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
